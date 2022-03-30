@@ -1,0 +1,2 @@
+# Django Art Gallery Website
+
