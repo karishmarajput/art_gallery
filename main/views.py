@@ -1,7 +1,44 @@
-from django.shortcuts import render
+from pyexpat.errors import messages
+from django.shortcuts import redirect, render
 from .models import *
+from django.contrib import messages
+
 
 # Create your views here.
+from .forms import ImageForm
+
+def uploadforform(request):
+    context ={}
+  
+    # create object of form
+    form = ImageForm(request.POST or None, request.FILES or None)
+      
+    # check if form data is valid
+    if form.is_valid():
+        messages.success(request, 'Image added successful')
+        # save the form data to model
+        form.save()
+  
+    context['form']= form
+    return render(request, "main/upload.html", context)
+
+from .forms import uploadcategory
+
+def uploadcategoryform(request):
+    context ={}
+  
+    # create object of form
+    forms = uploadcategory(request.POST or None, request.FILES or None)
+      
+    # check if form data is valid
+    if forms.is_valid():
+        messages.success(request, 'Category added successful')
+        # save the form data to model
+        forms.save()
+  
+    context['form']= forms
+    return render(request, "main/uploadcategory.html", context)
+
 
 def home(request):
     categories = Category.objects.all()
@@ -10,6 +47,15 @@ def home(request):
     context['categories'] = categories
 
     return render(request, 'main/index.html', context)
+
+
+def upload(request):
+    categories = Category.objects.all()
+
+    context = {}
+    context['categories'] = categories
+
+    return render(request, 'main/upload.html', context)
 
 
 def categoryPage(request, slug):
